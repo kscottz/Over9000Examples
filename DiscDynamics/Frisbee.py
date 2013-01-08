@@ -1,7 +1,12 @@
 import numpy as np
-
+# Reference:
+# http://web.mit.edu/womens-ult/www/smite/frisbee_physics.pdf
+# Adapted from:
+# V. R. Morrison
+# Physics Department, Mount Allison University, Sackville, NB Canada
 class Frisbee():
     def __init__(self):
+        # set initial conditions
         self.g = -9.81
         # The acceleration of gravity (m/s^2).
 
@@ -26,6 +31,7 @@ class Frisbee():
         self.CDA = 2.72
         # The drag coefficient dependent on alpha.
         self.ALPHA0 = -4.0
+
         self.cl = 0.00
         self.cd = 0.00
 
@@ -44,21 +50,21 @@ class Frisbee():
         # Initial y velocity vy = vy0.
         vy = vy0
 
-        flight_path = []
+        flight_path = [] # create a list 
         flight_path.append([x,y,vx,vy])
-        while( y > 0.00):
-            #print (x,y)
-            x,y,vx,vy = self.step(x,y,vx,vy,deltaT)
+        while( y > 0.00): # while we don't hit the ground
+            x,y,vx,vy =  self.step(x,y,vx,yv,deltaT) 
+            # do one step and add the result to our list
             flight_path.append([x,y,vx,vy])
-        return flight_path
+        return flight_path # return the list 
 
 
     def step(self,x,y,vx,vy,deltaT):
         # The change in velocity in the y direction obtained setting the            
         # net force equal to the sum of the gravitational force and the
         # lift force and solving for delta v.
+        # calculatae how the velocity changes
         deltavy = ((self.RHO*(vx**2)*self.AREA*self.cl/2.0)/self.m)+self.g
-        
         deltavy = deltavy*deltaT
         # The change in velocity in the x direction, obtained by
         # solving the force equation for delta v. (The only force
@@ -67,6 +73,7 @@ class Frisbee():
         
         # The new positions and velocities are calculated using
         # simple introductory mechanics.        
+        # take the old value and add the change during our timestep
         vx = vx + deltavx
         vy = vy + deltavy
         x = x + vx*deltaT
